@@ -4,6 +4,7 @@
 Make your hackerspace a XMPP buddy.
 """
 from optparse import OptionParser
+import requests
 import sleekxmpp
 import sys
 import time
@@ -43,13 +44,14 @@ if __name__ == '__main__':
     # just run in an endless loop and check from time to time
     while(True):
         try:
-            jsondata = urllib.request.urlopen(opts.jsonurl)
+            jsondata = requests.get(opts.jsonurl)
         except AttributeError:
             print("reading from URL failed")
             continue
-        finally:
-            time.sleep(5*60)
-        spacestate = json.load(jsondata.read())
+        if 200 != jsondata.status_code:
+            print("reading from URL failed")
+            continue
+        spacestate = json.loads(jsondata.text)
         if spacestate['open']:
             # set up the bot
             xmpp = HackerspaceApiBot(opts.jid, opts.password)
