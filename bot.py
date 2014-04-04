@@ -5,6 +5,7 @@ Make your hackerspace a XMPP buddy.
 """
 from optparse import OptionParser
 import sleekxmpp
+import sys
 import time
 import urllib.request
 import json
@@ -34,6 +35,10 @@ if __name__ == '__main__':
                     help="URL to load hackerspace API json file from")
 
     opts, args = optp.parse_args()
+
+    if None == opts.jsonurl:
+        print("no URL given ...")
+        sys.exit(1)
 
     # just run in an endless loop and check from time to time
     while(True):
