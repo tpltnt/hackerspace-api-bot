@@ -10,10 +10,12 @@ sleekXMPP installation
 ** ```$ virtualenv SANDOX```
 ** ```$ source SANDBOX/bin/activate```
 * install SleekXMPP: ```$ pip install sleekxmpp```
+* install requests: ```$ pip install requests```
 * done
 
 references
 ----------
 * [hackerspace API](http://spaceapi.net/)
 * [SleekXMPP](http://sleekxmpp.com/)
+* [requests](http://docs.python-requests.org/)
 * [virtualenv](http://www.virtualenv.org)
