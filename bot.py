@@ -5,6 +5,7 @@ Make your hackerspace a XMPP buddy.
 """
 from optparse import OptionParser
 import sleekxmpp
+import time
 import urllib
 import json
 
@@ -13,13 +14,11 @@ class HackerspaceApiBot(sleekxmpp.ClientXMPP):
     A SleekXMPP based bot that will mimic the on-/offline 
     status of a given hackerspace.
     """
-    def __init__(self, jid, password, jsonurl):
-        self.jsonurl = jsonurl
+    def __init__(self, jid, password):
         super(HackerspaceApiBot, self).__init__(jid, password)
         self.add_event_handler('session_start', self.start)
 
     def start(self, event):
-        spacestate = json.load(urllib.urlopen(self.jsonurl))
         self.send_presence("hello world")
         self.get_roster()
 
@@ -36,13 +35,17 @@ if __name__ == '__main__':
 
     opts, args = optp.parse_args()
 
-    # set up the bot
-    xmpp = HackerspaceApiBot(opts.jid, opts.password, opts.jsonurl)
-    xmpp.register_plugin('xep_0199') # XMPP Ping
-
-    # Connect to server and start processing doing things
-    if xmpp.connect():
-        xmpp.process(block=True)
-        print("working ...")
-    else:
-        print("Unable to connect.")
+    # just run in an endless loop
+    while(True):
+        spacestate = json.load(urllib.urlopen(opts.jsonurl))
+        if spacestate['open']:
+            # set up the bot
+            xmpp = HackerspaceApiBot(opts.jid, opts.password)
+            xmpp.register_plugin('xep_0199') # XMPP Ping
+            # connect to server and set status
+            if xmpp.connect():
+                xmpp.process(block=True)
+                print("going online ...")
+            else:
+                print("unable to connect to server")
+        time.sleep(60)
