@@ -3,7 +3,7 @@
 """
 Make your hackerspace a XMPP buddy.
 """
-
+from optparse import OptionParser
 import sleekxmpp
 
 
@@ -19,3 +19,14 @@ class HackerspaceApiBot(sleekxmpp.ClientXMPP):
     def start(self, event):
         self.send_presence("hello world")
         self.get_roster()
+
+if __name__ == '__main__':
+    # Setup the command line arguments.
+    optp = OptionParser()
+    # JID and password as arguments
+    optp.add_option("-j", "--jid", dest="jid",
+                    help="JID to use")
+    optp.add_option("-p", "--password", dest="password",
+                    help="password to use")
+
+    opts, args = optp.parse_args()
