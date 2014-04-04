@@ -16,3 +16,4 @@ references
 ----------
 * [hackerspace API](http://spaceapi.net/)
 * [SleekXMPP](http://sleekxmpp.com/)
+* [virtualenv](http://www.virtualenv.org)
