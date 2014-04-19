@@ -3,6 +3,7 @@
 """
 Make your hackerspace a XMPP buddy.
 """
+from configparser import ConfigParser
 from optparse import OptionParser
 import requests
 import sleekxmpp
@@ -30,18 +31,43 @@ if __name__ == '__main__':
     # Setup the command line arguments.
     optp = OptionParser()
     # JID and password as arguments
+    optp.add_option("-c", "--config", dest="config",
+                    help="configuration file (ini-format) to use")
     optp.add_option("-j", "--jid", dest="jid",
                     help="JID to use")
     optp.add_option("-p", "--password", dest="password",
-                    help="password to use")
+                    help="XMPP account password to use")
     optp.add_option("-u", "--url", dest="jsonurl",
                     help="URL to load hackerspace API json file from")
 
     opts, args = optp.parse_args()
 
-    if None == opts.jsonurl:
-        print("no URL given ...")
-        sys.exit(1)
+    
+    if None == opts.config:
+        if None == opts.jid:
+            print("no JID given ...")
+            sys.exit(1)
+        if None == opts.jsonurl:
+            print("no URL given ...")
+            sys.exit(1)
+        if None == opts.password:
+            print("no XMPP account password given ...")
+            sys.exit(1)
+    else:
+        configfile = ConfigParser()
+        configfile.read(opts.config)
+        if 1 != len(configfile.sections()):
+            print("can not process more than on section/hackerspace currently ...")
+            sys.exit(2)
+        # iterate over all sections (hackerspace configs)
+        for section in configfile:
+            # skip default
+            if "DEFAULT" == section:
+                continue
+            print("using \"" + section + "\" configuration")
+            opts.jid = configfile[section]['jid']
+            opts.jsonurl = configfile[section]['url']
+            opts.password = configfile[section]['password']
 
     # just run in an endless loop and check from time to time
     while(True):
