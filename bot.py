@@ -85,7 +85,7 @@ if __name__ == '__main__':
             print("reading from URL failed")
             continue
         spacestate = json.loads(jsondata.text)
-        print("spacestate: " + str(spacestate['open']))
+        #print("spacestate: " + str(spacestate['open']))
         if spacestate['open']:
             # validate TLS Certificates
             #xmpp.ca_certs = "path/to/ca/cert"
