@@ -14,10 +14,12 @@ import json
 class HackerspaceApiBot(sleekxmpp.ClientXMPP):
     """
     A SleekXMPP based bot that will mimic the on-/offline 
-    status of a given hackerspace.
+    status of a given hackerspace. It also authorizes other
+    automatically to allow status tracking.
     """
     def __init__(self, jid, password):
         super(HackerspaceApiBot, self).__init__(jid, password)
+        self.auto_authorize(True)
         self.add_event_handler('session_start', self.start)
 
     def start(self, event):
