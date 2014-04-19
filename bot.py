@@ -80,7 +80,8 @@ if __name__ == '__main__':
             print("reading from URL failed")
             continue
         spacestate = json.loads(jsondata.text)
-        if spacestate['open']:
+        print("spacestate: " + str(spacestate['open']))
+        if spacestate['open'] or True:
             # set up the bot
             xmpp = HackerspaceApiBot(opts.jid, opts.password)
             xmpp.register_plugin('xep_0199') # XMPP Ping
