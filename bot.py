@@ -5,6 +5,7 @@ Make your hackerspace a XMPP buddy.
 """
 from configparser import ConfigParser
 from optparse import OptionParser
+import logging
 import requests
 import sleekxmpp
 import sys
@@ -19,8 +20,8 @@ class HackerspaceApiBot(sleekxmpp.ClientXMPP):
     automatically to allow status tracking.
     """
     def __init__(self, jid, password):
-        super(HackerspaceApiBot, self).__init__(jid, password)
-        self.auto_authorize(True)
+        super(HackerspaceApiBot, self).__init__(jid, password, plugin_whitelist=['xep_0199'])
+        self.auto_authorize = True
         self.add_event_handler('session_start', self.start)
 
     def start(self, event):
@@ -69,6 +70,10 @@ if __name__ == '__main__':
             opts.jsonurl = configfile[section]['url']
             opts.password = configfile[section]['password']
 
+    # set up logging (for debugging)
+    #logging.basicConfig(level=logging.INFO,
+    #                    format='%(levelname)-8s %(message)s')
+
     # just run in an endless loop and check from time to time
     while(True):
         try:
@@ -81,12 +86,17 @@ if __name__ == '__main__':
             continue
         spacestate = json.loads(jsondata.text)
         print("spacestate: " + str(spacestate['open']))
-        if spacestate['open'] or True:
+        if spacestate['open']:
+            # validate TLS Certificates
+            #xmpp.ca_certs = "path/to/ca/cert"
             # set up the bot
             xmpp = HackerspaceApiBot(opts.jid, opts.password)
+            xmpp.register_plugin('xep_0030') # Service Discovery
+            xmpp.register_plugin('xep_0004') # Data Forms
+            xmpp.register_plugin('xep_0060') # PubSub
             xmpp.register_plugin('xep_0199') # XMPP Ping
             # connect to server and set status
-            if xmpp.connect():
+            if xmpp.connect(use_tls=True, use_ssl=False):
                 xmpp.process(block=True)
                 print("going online ...")
             else:
