@@ -7,15 +7,7 @@ the space is closed.
 
 bot installation (Debian)
 -------------------------
-* add a dedicated user: ```adduser --shell /bin/bash --disabled-password hsbot```
 * create directory: ```$ mkdir /etc/hsbot && chmod 755 /etc/hsbot```
-* create file "run"
-```
-#!/bin/sh
-cd /etc/hsbot
-exec setuidgid hsbot source bot-env/bin/activate && ./bot.py -c CONFIG
-```
-* adjust file permissions and ownership: ```# chmod 755 /etc/hsbot/run && chown -R hsbot:hsbot /etc/hsbot```
 * install Python: ```# apt-get install virtualenv python3```
 * create bot environment: ```$ virtualenv --python=/usr/bin/python3 bot-env```
 * activate it: ```$ source bot-env/bin/activate```
@@ -26,8 +18,17 @@ exec setuidgid hsbot source bot-env/bin/activate && ./bot.py -c CONFIG
 start on runlevel [12345]
 stop on runlevel [^12345]
 respawn
-exec /command/svscanboot
+exec /usr/bin/svscanboot
 ```
+* create file "/etc/hsbot/run"
+```
+#!/bin/sh
+cd /etc/hsbot
+exec setuidgid hsbot source bot-env/bin/activate && ./bot.py -c CONFIG
+```
+* add a dedicated user: ```adduser --shell /bin/bash --disabled-password hsbot```
+* adjust file permissions and ownership: ```# chmod 755 /etc/hsbot/run && chown -R hsbot:hsbot /etc/hsbot```
+* create hsbot service in daemontools: ```# ln -s /etc/hsbot /service/hsbot```
 
 references
 ----------
