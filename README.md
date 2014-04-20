@@ -1,8 +1,9 @@
 hackerspace-api-bot
 ===================
 
-Bridge your hackerspace to XMPP. The bot will be online when 
-your hackerspace is open, and offline if the space is closed.
+Bridge your hackerspace to [XMPP](https://en.wikipedia.org/wiki/XMPP). 
+The bot will be online when your hackerspace is open, and offline if 
+the space is closed.
 
 bot installation (Debian)
 -------------------------
