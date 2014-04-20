@@ -12,7 +12,7 @@ bot installation (Debian)
 * activate it: ```$ source bot-env/bin/activate```
 * install dependencies: ```$ pip-3.2 install requests && pip-3.2 install sleekxmpp```
 * install daemontools: ```# apt-get install daemontools```
-** create config /etc/init/svscan.conf:
+  * create config /etc/init/svscan.conf:
 ```
 start on runlevel [12345]
 stop on runlevel [^12345]
