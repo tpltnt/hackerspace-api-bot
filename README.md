@@ -6,7 +6,15 @@ your hackerspace is open, and offline if the space is closed.
 
 bot installation (Debian)
 -------------------------
-* create directory: ```$ mkdir /etc/hackerspace-api-bot```
+* add a dedicated user: ```adduser --shell /bin/bash --disabled-password hsbot```
+* create directory: ```$ mkdir /etc/hsbot && chmod 755 /etc/hsbot```
+* create file "run"
+```
+#!/bin/sh
+cd /etc/hsbot
+exec setuidgid hsbot source bot-env/bin/activate && ./bot.py -c CONFIG
+```
+* adjust file permissions and ownership: ```# chmod 755 hsbot/run && chown -R hsbot:hsbot /etc/hsbot```
 * install Python: ```# apt-get install virtualenv python3```
 * create bot environment: ```$ virtualenv --python=/usr/bin/python3 bot-env```
 * activate it: ```$ source bot-env/bin/activate```
