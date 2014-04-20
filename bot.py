@@ -98,7 +98,6 @@ if __name__ == '__main__':
             # connect to server and set status
             if xmpp.connect(use_tls=True, use_ssl=False):
                 xmpp.process(block=True)
-                print("going online ...")
             else:
                 print("unable to connect to server")
         # wait 5 minutes before checking again
