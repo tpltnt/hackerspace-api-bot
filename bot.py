@@ -86,7 +86,7 @@ if __name__ == '__main__':
             continue
         spacestate = json.loads(jsondata.text)
         #print("spacestate: " + str(spacestate['open']))
-        if spacestate['open']:
+        if spacestate['open'] or True:
             # validate TLS Certificates
             #xmpp.ca_certs = "path/to/ca/cert"
             # set up the bot
