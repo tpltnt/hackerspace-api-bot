@@ -15,7 +15,7 @@ bot installation (Debian)
 cd /etc/hsbot
 exec setuidgid hsbot source bot-env/bin/activate && ./bot.py -c CONFIG
 ```
-* adjust file permissions and ownership: ```# chmod 755 hsbot/run && chown -R hsbot:hsbot /etc/hsbot```
+* adjust file permissions and ownership: ```# chmod 755 /etc/hsbot/run && chown -R hsbot:hsbot /etc/hsbot```
 * install Python: ```# apt-get install virtualenv python3```
 * create bot environment: ```$ virtualenv --python=/usr/bin/python3 bot-env```
 * activate it: ```$ source bot-env/bin/activate```
