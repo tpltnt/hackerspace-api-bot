@@ -74,6 +74,14 @@ if __name__ == '__main__':
     #logging.basicConfig(level=logging.INFO,
     #                    format='%(levelname)-8s %(message)s')
 
+    # validate TLS Certificates
+    #xmpp.ca_certs = "path/to/ca/cert"
+    # set up the bot
+    xmpp = HackerspaceApiBot(opts.jid, opts.password)
+    xmpp.register_plugin('xep_0030') # Service Discovery
+    xmpp.register_plugin('xep_0004') # Data Forms
+    xmpp.register_plugin('xep_0060') # PubSub
+    xmpp.register_plugin('xep_0199') # XMPP Ping
     # just run in an endless loop and check from time to time
     while(True):
         try:
@@ -85,20 +93,14 @@ if __name__ == '__main__':
             print("reading from URL failed")
             continue
         spacestate = json.loads(jsondata.text)
-        #print("spacestate: " + str(spacestate['open']))
+
         if spacestate['open']:
-            # validate TLS Certificates
-            #xmpp.ca_certs = "path/to/ca/cert"
-            # set up the bot
-            xmpp = HackerspaceApiBot(opts.jid, opts.password)
-            xmpp.register_plugin('xep_0030') # Service Discovery
-            xmpp.register_plugin('xep_0004') # Data Forms
-            xmpp.register_plugin('xep_0060') # PubSub
-            xmpp.register_plugin('xep_0199') # XMPP Ping
             # connect to server and set status
             if xmpp.connect(use_tls=True, use_ssl=False):
                 xmpp.process(block=True)
             else:
                 print("unable to connect to server")
+        else:
+            xmpp.disconnect(wait=True)
         # wait 5 minutes before checking again
         time.sleep(5*60)
